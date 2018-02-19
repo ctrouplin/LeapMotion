@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace JeuLeap
 {
@@ -21,6 +22,8 @@ namespace JeuLeap
         {
             SafeWriteLine("init...");
             SafeWriteLine(GetDemandes());
+            DisplayDemandes();
+
         }
         private void SafeWriteLine(String line)
         {
@@ -114,9 +117,27 @@ namespace JeuLeap
             {
                 return reader.ReadToEnd();
             }
-
         }
-        
+
+        public void DisplayDemandes()
+        {                                   //Sauvegarde des items du json dans des variables
+            string info = GetDemandes();
+            dynamic blogPosts = JArray.Parse(info);
+            dynamic blogPost = blogPosts[0];
+            string id = blogPost.id;
+            string summary  = blogPost.summary[0].value;
+
+            for (int i = 0; i < info.Count(); i++) //sépare 2 json
+            {
+                SafeWriteLine(blogPost[i]);
+               
+            }
+            SafeWriteLine("Une nouvelle demande est active: " + summary);
+            SafeWriteLine("id: " + id);
+            SafeWriteLine("intitulé de la demande: " + summary);
+            SafeWriteLine("Veuillez répondre à la question :");
+        }
+
 
 
         /***********************************/
