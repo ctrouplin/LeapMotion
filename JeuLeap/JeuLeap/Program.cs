@@ -32,6 +32,18 @@ namespace JeuLeap
                 Console.WriteLine(line);
             }
         }
+        private void Authentication() {
+            WebClient client = new WebClient();
+            String login = “admin”;
+            String password = “silvia”;
+
+            client.Credentials = new System.Net.NetworkCredential(login, password);
+
+            string idContent = Convert.ToBase64String(Encoding.ASCII.GetBytes(login + “:” +password));
+            webClient.Headers[HttpRequestHeader.Authorization] = “Basic ” +idContent;
+
+            var result = webClient.DownloadString(url);
+        }
 
         public override void OnInit(Controller controller)
         {
@@ -79,7 +91,7 @@ namespace JeuLeap
                 SafeWriteLine("taux de confiance=" + h.Confidence); //affiche le taux de confiance de détection de la leapmotion 0<x<1
                 if (h.Confidence >= 0.8)
                 {
-                    if (frame.Hands.Count > 1 || frame.Fingers.Count > 5)
+                    if (frame.Hands.Count > 1 || frame.Fingers.Count > 5) //on verifie le nombre de mains ou de doigts détéctés par la leapMotion
                     {
                         SafeWriteLine("Vous devez voter qu'avec 1 seule main."); //lorsque la LeapMotion intercepete 2 mains en meme temps
                     }                                                            //on précise à l'utilisateur que le vote se fait à une main
